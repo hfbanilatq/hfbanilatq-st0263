@@ -9,7 +9,14 @@ services:
       - nginx-network
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-      - ~/var/www/html:/var/www/html
+      - nfs-drupal-volume:/var/www/html
 
 networks:
   nginx-network:
+volumes:
+  nfs-drupal-volume:  # Aquí defines el volumen existente
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=54.234.20.128,rw"
+      device: ":/var/www/html"
