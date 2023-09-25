@@ -8,7 +8,9 @@ services:
       - internal
       - external
     volumes:
-      - nfs-drupal-volume:/var/www/html  # Aquí especificas el nombre del volumen existente
+      - nfs-drupal-volume:/var/www/html  
+    ports:
+      - "80:80"
 
 networks:
   internal:
