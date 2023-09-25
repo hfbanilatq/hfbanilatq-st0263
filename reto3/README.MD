@@ -144,8 +144,12 @@ Se generaron varios inconvenientes al momento de montar los servidores drupal la
 
 # referencias:
 <debemos siempre reconocer los créditos de partes del código que reutilizaremos, así como referencias a youtube, o referencias bibliográficas utilizadas para desarrollar el proyecto o la actividad>
-## sitio1-url 
-## sitio2-url
+## https://www.digitalocean.com/community/tutorials/how-to-install-drupal-with-docker-compose
+## https://forums.docker.com/t/docker-compose-mount-volume-nfs/132551
+## https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-server-using-block-storage
+## https://bluexp.netapp.com/blog/azure-anf-blg-linux-nfs-server-how-to-set-up-server-and-client
+## https://docs.aws.amazon.com/es_es/efs/latest/ug/mounting-fs-old.html
+
 ## url de donde tomo info para desarrollar este proyecto
 
 #### versión README.md -> 1.0 (2022-agosto)
