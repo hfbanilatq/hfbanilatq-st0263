@@ -11,7 +11,8 @@ services:
       - drupal-data:/var/www/html
 
 networks:
-  drupal-network:
+  internal:
+  external:
 
 volumes:
   drupal-data:
