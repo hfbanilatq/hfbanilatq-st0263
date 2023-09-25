@@ -1,20 +1,18 @@
 version: '3'
 services:
   drupal:
-    image: drupal:8.7.8-fpm-alpine
+    image: drupal:9
     container_name: drupal
-    restart: unless-stopped
-    networks:
-      - internal
-      - external
-    volumes:
-      - nfs-drupal-volume:/var/www/html  
     ports:
       - "80:80"
+    restart: unless-stopped
+    networks:
+      - drupal-network
+    volumes:
+      - nfs-drupal-volume:/var/www/html  
 
 networks:
-  internal:
-  external:
+  drupal-network:
 
 volumes:
   nfs-drupal-volume:  # Aquí defines el volumen existente
