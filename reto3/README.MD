@@ -22,7 +22,29 @@
 
 # 3. Descripción del ambiente de desarrollo y técnico: lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
 
-## como se compila y ejecuta.
+## Comandos Para instalar docker y activar docker-compose e instalar git en AWS EC2 Estos comandos son para instancias Amazon Linux 2 AMI 
+# INSTALAR GIT: sudo yum install -y git
+# CLONAR el repositorio: https://github.com/hfbanilatq/hfbanilatq-st0263.git
+
+# NOTA ESTOS COMANDOS ESTÁN EN EL ARCHIVO instalar-docker-compose.sh que te permite ejecutar todos a la vez
+# sudo amazon-linux-extras install docker
+# sudo service docker start
+# sudo usermod -a -G docker ec2-user
+# sudo chkconfig docker on
+
+
+# REINICIAR LA INSTANCIA: sudo reboot
+
+# sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+
+# sudo chmod +x /usr/local/bin/docker-compose
+# COMPOBAR LA INSTALACION DE DOCKER-COMPOSE: docker-compose version
+
+# MOVERSE A LA CARPETA DEL SERVICIO QUE QUIERAS DESPLEGAR EN DOCKER: cd hfbanilatq-st0263/reto3/mysql/{CARPETA_OBJETIVO}
+
+# MONTAR EL SERVICIO EN DOCKER COMPOSE: docker-compose up -d
+# VERIFICAR QUE SE EJECUTE CORRECTAMENTE: docker-compose ps
+#
 ## detalles del desarrollo.
 ## detalles técnicos
 ## descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
