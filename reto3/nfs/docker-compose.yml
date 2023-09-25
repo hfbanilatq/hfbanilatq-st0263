@@ -10,7 +10,6 @@ services:
     volumes:
       - reto3-tec:/nfsshare
     ports:
-      - "111:111/udp"
       - "2049:2049/tcp"
       - "2049:2049/udp"
       - "32765:32765/tcp"
