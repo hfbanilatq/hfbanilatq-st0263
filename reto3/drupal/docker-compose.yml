@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   drupal:
     image: drupal:8.7.8-fpm-alpine
@@ -8,7 +8,7 @@ services:
       - internal
       - external
     volumes:
-      - /home/ec2-user/var/www/html:/var/www/html
+      - drupal-data:/var/www/html
     user: '1000:1000'
 
 networks:
@@ -17,3 +17,8 @@ networks:
 
 volumes:
   drupal-data:
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=54.234.20.128,rw"
+      device: ":/home/ec2-user/var/www/html"
