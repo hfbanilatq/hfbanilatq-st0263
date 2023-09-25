@@ -8,11 +8,9 @@ services:
       - SHARED_DIRECTORY=/nfsshare
       - SYNC=true
     volumes:
-      - nfsshare-modules:/nfsshare/modules
-      - nfsshare-profiles:/nfsshare/profiles
-      - nfsshare-themes:/nfsshare/themes
-      - nfsshare-sites:/nfsshare/sites
+      - reto3-tec:/nfsshare
     ports:
+      - "111:111/udp"
       - "2049:2049/tcp"
       - "2049:2049/udp"
       - "32765:32765/tcp"
@@ -28,7 +26,4 @@ services:
 networks:
   nfs_network:
 volumes:
-   nfsshare-modules:
-   nfsshare-profiles:
-   nfsshare-themes:
-   nfsshare-sites:
+  reto3-tec:
