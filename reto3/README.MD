@@ -78,24 +78,30 @@ sudo chkconfig docker on
 # REINICIAR LA INSTANCIA: 
 
 
-sudo reboot
+    sudo reboot
 
- sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+    sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 
-sudo chmod +x /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
 
 
 # COMPOBAR LA INSTALACION DE DOCKER-COMPOSE: 
-docker-compose version
+
+
+   docker-compose version
 
 # Deplegar las aplicaciones en docker
 moverse la carpeta del proyecto git luego a reto3 y por ultimo a la carpeta del sevicio que quieres ejecutar: cd hfbanilatq-st0263/reto3/mysql/{CARPETA_OBJETIVO}
 
 # MONTAR EL SERVICIO EN DOCKER COMPOSE: 
-docker-compose up -d
+
+  docker-compose up -d
+
 # VERIFICAR QUE SE EJECUTE CORRECTAMENTE: 
+<code>
 docker-compose ps
-#
+
+
 ## detalles del desarrollo
 Se empelaron archivos docker-compose, por lo tanto se requiere instalar docker-compose en los servidores, se emplearon 5 instnacias de EC2 que corren sobre la misma VPC, la cual tiene 4 subnet, 2 publicas y 2 privadas, aunque al montar las instancias se utilizaron las publicas para realizar la actividad en todos los servidores, se debe crear las instancias para el nfs-server, los drupal y mysql en subnets privadas. Y acceder directamente a través de la IP privada desde el servidor nginx
 
@@ -103,6 +109,7 @@ Se empelaron archivos docker-compose, por lo tanto se requiere instalar docker-c
 Los parametros de configuracion para los docker-compose .yml se deben configurar en un archivo .env dentro del 
 mismo directorio
 # Ejemplo .env Para mysql
+<code>
 MYSQL_ROOT_PASSWORD=
 MYSQL_DATABASE=
 MYSQL_PASSWORD=
