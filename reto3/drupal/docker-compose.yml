@@ -7,10 +7,10 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ~/nfsshared/modules:/var/www/html/modules
-      - ~/nfsshared/profiles:/var/www/html/profiles
-      - ~/nfsshared/themes:/var/www/html/themes
-      - ~/nfsshared/sites:/var/www/html/sites
+      - ~/nfsshared/var/www/html/modules:/var/www/html/modules
+      - ~/nfsshared/var/www/html/profiles:/var/www/html/profiles
+      - ~/nfsshared/var/www/html/themes:/var/www/html/themes
+      - ~/nfsshared/var/www/html/sites:/var/www/html/sites
     user: "1000:1000"
     networks:
       - drupal-network
