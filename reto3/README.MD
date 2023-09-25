@@ -24,7 +24,7 @@
 
 ## Comandos Para instalar docker y activar docker-compose e instalar git en AWS EC2 Estos comandos son para instancias Amazon Linux 2 AMI 
 # INSTALAR GIT: sudo yum install -y git
-# CLONAR el repositorio: https://github.com/hfbanilatq/hfbanilatq-st0263.git
+# CLONAR el repositorio: git clone https://github.com/hfbanilatq/hfbanilatq-st0263.git
 
 # NOTA ESTOS COMANDOS ESTÁN EN EL ARCHIVO instalar-docker-compose.sh que te permite ejecutar todos a la vez
 # sudo amazon-linux-extras install docker
