@@ -1,6 +1,6 @@
 # info de la materia: ST0263 TOPICOS ESPECIALES EN TELEMATICA
 #
-# Estudiante(s): Hector Fabio Banilat - hfbanilatq@eafit.edu.co, Daniel Alfonso Solano - dsolano@eafit.edu.co
+# Estudiante(s): Hector Fabio Banilat - hfbanilatq@eafit.edu.co, Daniel Alfonso Solano - dsolano@eafit.edu.co, David Sanchez - dasancheza@eafit.edu.co
 #
 # Profesor: Edwin Monotya, emontoya@eafit.edu.co
 
