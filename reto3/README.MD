@@ -72,40 +72,45 @@ moverse la carpeta del proyecto git luego a reto3 y por ultimo a la carpeta del 
 docker-compose up -d
 # VERIFICAR QUE SE EJECUTE CORRECTAMENTE: 
 docker-compose ps
-
-
-
-
-
-
 #
-## detalles del desarrollo.
-## detalles técnicos
+## detalles del desarrollo
+Se empelaron archivos docker-compose, por lo tanto se requiere instalar docker-compose en los servidores, se emplearon 5 instnacias de EC2 que corren sobre la misma VPC, la cual tiene 4 subnet, 2 publicas y 2 privadas, aunque al montar las instancias se utilizaron las publicas para realizar la actividad en todos los servidores, se debe crear las instancias para el nfs-server, los drupal y mysql en subnets privadas. Y acceder directamente a través de la IP privada desde el servidor nginx
+
 ## Parametros del proyecto
 Los parametros de configuracion para los docker-compose .yml se deben configurar en un archivo .env dentro del 
 mismo directorio
 # Ejemplo .env Para mysql
-MYSQL_ROOT_PASSWORD=admin
-MYSQL_DATABASE=drupal
-MYSQL_PASSWORD=admin
+MYSQL_ROOT_PASSWORD=
+MYSQL_DATABASE=
+MYSQL_PASSWORD=
 TZ=America/Bogota
-## opcional - detalles de la organización del código por carpetas o descripción de algún archivo. (ESTRUCTURA DE DIRECTORIOS Y ARCHIVOS IMPORTANTE DEL PROYECTO, comando 'tree' de linux)
+
+# Ejemplo .env Para drupal
+
+MYSQL_HOST:
+MYSQL_ROOT_PASSWORD=
+MYSQL_DATABASE=
+MYSQL_PASSWORD=
+TZ=America/Bogota
+
+
 ## 
-## opcionalmente - si quiere mostrar resultados o pantallazos 
+## Resultados 
 
 # 4. Descripción del ambiente de EJECUCIÓN (en producción) lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
 
 # IP o nombres de dominio en nube o en la máquina servidor.
+    1. SERVIDOR NFS: 54.234.20.128
+    2. SERVIDOR MYSQL: 34.196.121.51
+    3. DRUPAL INSTANCIA 1: 44.218.130.159
+    4. DRUPAL INSTANCIA 2: 44.216.81.68
+    5. NGINX LOAD BALANCER: 34.201.89.10
 
 ## descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
 
-## como se lanza el servidor.
-
-## una mini guia de como un usuario utilizaría el software o la aplicación
-
-## opcionalmente - si quiere mostrar resultados o pantallazos 
-
 # 5. otra información que considere relevante para esta actividad.
+
+Se generaron varios inconvenientes al momento de montar los servidores drupal la carpeta en el servidor nfs, ya que no tenia acceso, se intentó montar directamente en una carpeta del sistema y luego pasarle esa carpeta como volumen de docker pero seguía generando problemas, hasta que se hayó la solución que es darle el control de /var/www/html al usuario ec2-user de esta forma al montar el volumen desde docker-compsose ya no generaba problemas de acceso y tampoco generaba problemas de lectura
 
 # referencias:
 <debemos siempre reconocer los créditos de partes del código que reutilizaremos, así como referencias a youtube, o referencias bibliográficas utilizadas para desarrollar el proyecto o la actividad>
