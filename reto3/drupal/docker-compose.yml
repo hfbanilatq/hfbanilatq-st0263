@@ -21,4 +21,4 @@ volumes:
     driver_opts:
       type: "nfs"
       o: "addr=54.234.20.128,rw"
-      device: ":/home/ec2-user/var/www/html"
+      device: ":/var/www/html"
