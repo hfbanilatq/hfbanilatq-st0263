@@ -9,6 +9,7 @@ services:
       - external
     volumes:
       - ~/var/www/html:/var/www/html
+    user: '1000:1000'
 
 networks:
   internal:
