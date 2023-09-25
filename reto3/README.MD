@@ -61,8 +61,12 @@ este se ejecuta en ambientes donde el drupal se ejecuta localmente el archivo do
 
 # NOTA ESTOS COMANDOS ESTÁN EN EL ARCHIVO instalar-docker-compose.sh 
 El cual te permite ejecutar todos a la vez para esto vete a la carpeta hfbanilatq-st063/reto3 y ejecuta lo siguiente: 
+
+
 chmod +x instalar-docker-compose.sh 
 sudo ./instalar-docker-compose.sh
+
+
 
 # Comandos para instalar docker
 sudo amazon-linux-extras install docker
@@ -72,11 +76,15 @@ sudo chkconfig docker on
 
 
 # REINICIAR LA INSTANCIA: 
+
+
 sudo reboot
 
  sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 
 sudo chmod +x /usr/local/bin/docker-compose
+
+
 # COMPOBAR LA INSTALACION DE DOCKER-COMPOSE: 
 docker-compose version
 
