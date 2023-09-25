@@ -1,0 +1,46 @@
+version: '3'
+services:
+  drupal:
+    image: drupal:9
+    container_name: drupal
+    env_file: .env
+    ports:
+      - "80:80"
+    volumes:
+      - drupal-modules:/var/www/html/modules
+      - drupal-profiles:/var/www/html/profiles
+      - drupal-themes:/var/www/html/themes
+      - drupal-sites:/var/www/html/sites
+    depends_on:
+      - mysql
+    networks:
+      - drupal-network
+
+volumes:
+  drupal-modules:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=44.216.81.68,nfsvers=4
+      device: ":/ruta/al/directorio/nfs/modules"
+  drupal-profiles:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=44.216.81.68,nfsvers=4
+      device: ":/ruta/al/directorio/nfs/profiles"
+  drupal-themes:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=44.216.81.68,nfsvers=4
+      device: ":/ruta/al/directorio/nfs/themes"
+  drupal-sites:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=44.216.81.68,nfsvers=4
+      device: ":/ruta/al/directorio/nfs/sites"
+
+networks:
+  drupal-network:
