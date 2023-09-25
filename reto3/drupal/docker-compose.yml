@@ -8,7 +8,7 @@ services:
       - internal
       - external
     volumes:
-      - drupal-data:/var/www/html
+      - /home/ec2-user/var/www/html:/var/www/html
     user: '1000:1000'
 
 networks:
