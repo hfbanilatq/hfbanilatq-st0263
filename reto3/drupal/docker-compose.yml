@@ -11,6 +11,7 @@ services:
       - ~/nfsshared/profiles:/var/www/html/profiles
       - ~/nfsshared/themes:/var/www/html/themes
       - ~/nfsshared/sites:/var/www/html/sites
+    user: "1000:1000"
     networks:
       - drupal-network
 
