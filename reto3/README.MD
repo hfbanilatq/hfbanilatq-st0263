@@ -24,11 +24,15 @@
 Se desplegó el servidor de Mysql usando docker-compose, también se configuró una instancia de EC2 Linux 2 AMI como servidor de arcvhivos NFS, se desplegaron dos servidores de EC2 donde se ejecutan las instancias de DRUPAL 9 usando docker-compose, se desplegó el sevidor nginx que sirve como balanceador de carga para las dos instancias de drupal. En los archivos de docker-compose se crean un volumen que monta la carpeta /var/www/html del servidor nfs donde se guardarán los archivos
 
 Los servidores se les asignó una ip elastica de la siguiente manera:
+
+
     1. SERVIDOR NFS: 54.234.20.128
     2. SERVIDOR MYSQL: 34.196.121.51
     3. DRUPAL INSTANCIA 1: 44.218.130.159
     4. DRUPAL INSTANCIA 2: 44.216.81.68
     5. NGINX LOAD BALANCER: 34.201.89.10
+
+
 ## 1.2. Que aspectos NO cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
 
 Por indicacion del profesor no se continuo con la adquisición del dominio y su posterior instalación de certificados
@@ -45,8 +49,15 @@ Se están empleando imagenes de gninx, mysql, y drupal las cuales se están ejec
 # CLONAR el repositorio: 
 git clone https://github.com/hfbanilatq/hfbanilatq-st0263.git
 #  Instalar el servidor nfs
-NOTA IMPORTANTE PARA PODER CREAR EL NFS SERVER NECESITAS EJECUTAR LOS COMANDOS EN EL DOCUMENTO /nfs/ EN EL SERVIDOR NFS y luego corre lo que se encuentra en el documento crear-directorios-nfs.sh 
-Ingnorar el documento nfs-instalar-y-montar-sh este se ejecuta en ambientes donde el drupal se ejecuta localmente el archivo docker-compose.yml para drupal ya tiene configurado montar un volumen nfs al arrancar
+NOTA IMPORTANTE PARA PODER CREAR EL NFS SERVER NECESITAS EJECUTAR LOS COMANDOS EN EL DOCUMENTO 
+
+crear-directorios-nfs.sh  
+
+/nfs/ EN EL SERVIDOR NFS y luego corre lo que se encuentra en el documento ingnorar el documento 
+
+nfs-instalar-y-montar-sh 
+
+este se ejecuta en ambientes donde el drupal se ejecuta localmente el archivo docker-compose.yml para drupal ya tiene configurado montar un volumen nfs al arrancar
 
 # NOTA ESTOS COMANDOS ESTÁN EN EL ARCHIVO instalar-docker-compose.sh 
 El cual te permite ejecutar todos a la vez para esto vete a la carpeta hfbanilatq-st063/reto3 y ejecuta lo siguiente: 
