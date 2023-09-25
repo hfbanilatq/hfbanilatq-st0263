@@ -3,6 +3,7 @@ version: '3'
 services:
   nginx-balancer:
     image: nginx
+    restart: always
     ports:
       - "80:80"
     networks:
