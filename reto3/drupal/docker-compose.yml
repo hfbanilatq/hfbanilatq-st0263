@@ -8,7 +8,7 @@ services:
       - internal
       - external
     volumes:
-      - ~/var/www/html:/var/www/html
+      - /home/ec2-user/var/www/html:/var/www/html
 
 networks:
   internal:
