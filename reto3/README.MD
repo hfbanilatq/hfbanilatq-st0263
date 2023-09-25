@@ -26,7 +26,8 @@
 # INSTALAR GIT: sudo yum install -y git
 # CLONAR el repositorio: git clone https://github.com/hfbanilatq/hfbanilatq-st0263.git
 
-# NOTA ESTOS COMANDOS ESTÁN EN EL ARCHIVO instalar-docker-compose.sh que te permite ejecutar todos a la vez
+# NOTA ESTOS COMANDOS ESTÁN EN EL ARCHIVO instalar-docker-compose.sh que te permite ejecutar todos a la vez para esto vete a la carpeta hfbanilatq-st063/reto3 y ejecuta lo siguiente: chmod +x instalar-docker-compose.sh 
+# sudo ./instalar-docker-compose.sh
 # sudo amazon-linux-extras install docker
 # sudo service docker start
 # sudo usermod -a -G docker ec2-user
@@ -41,6 +42,20 @@
 # COMPOBAR LA INSTALACION DE DOCKER-COMPOSE: docker-compose version
 
 # MOVERSE A LA CARPETA DEL SERVICIO QUE QUIERAS DESPLEGAR EN DOCKER: cd hfbanilatq-st0263/reto3/mysql/{CARPETA_OBJETIVO}
+# NOTA IMPORTANTE PARA PODER CREAR EL NFS SERVER CON DOCKER NECESITAS CREAR LAS SIGUIENTES CARPETAS:
+# mkdir -p ~/tec3/nfs/modules
+# mkdir -p ~/tec3/nfs/profiles
+# mkdir -p ~/tec3/nfs/themes
+# mkdir -p ~/tec3/nfs/sites
+# Y DARLES LOS PERMISOS NECESARIOS
+# chmod -R 777 ~/tec3/nfs/modules
+# chmod -R 777 ~/tec3/nfs/profiles
+# chmod -R 777 ~/tec3/nfs/themes
+# chmod -R 777 ~/tec3/nfs/sites
+
+# O puedes hacerlo con el script crear-directorios-nfs.sh debes hacer lo mismo que con el de instalar docker para que ejecute
+
+
 
 # MONTAR EL SERVICIO EN DOCKER COMPOSE: docker-compose up -d
 # VERIFICAR QUE SE EJECUTE CORRECTAMENTE: docker-compose ps
