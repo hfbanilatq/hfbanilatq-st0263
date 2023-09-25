@@ -7,38 +7,12 @@ services:
     ports:
       - "80:80"
     volumes:
-      - drupal-modules:/var/www/html/modules
-      - drupal-profiles:/var/www/html/profiles
-      - drupal-themes:/var/www/html/themes
-      - drupal-sites:/var/www/html/sites
+      - ~/nfsshared/modules:/var/www/html/modules
+      - ~/nfsshared/profiles:/var/www/html/profiles
+      - ~/nfsshared/themes:/var/www/html/themes
+      - ~/nfsshared/sites:/var/www/html/sites
     networks:
       - drupal-network
-
-volumes:
-  drupal-modules:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=44.216.81.68,nfsvers=4
-      device: "~/nfsshared/modules"
-  drupal-profiles:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=44.216.81.68,nfsvers=4
-      device: "~/nfsshared/profiles"
-  drupal-themes:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=44.216.81.68,nfsvers=4
-      device: "~/nfsshared/themes"
-  drupal-sites:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=44.216.81.68,nfsvers=4
-      device: "~/nfsshared/sites"
 
 networks:
   drupal-network:
