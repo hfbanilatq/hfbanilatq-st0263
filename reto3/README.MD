@@ -9,10 +9,13 @@
 
  Se debe implementar una aplicacion monolitica como drupal o wordpress, usando 5 instancias de EC2 que se definirán acontinuación:
      1. Instancia de EC2 donde se debe ejecutar un contenedor de docker con nginx que funcionara como balanceador de carga
+
      2. Dos intancias de EC2 que deberan correr la aplicación en Docker en la cual seleccionamos Drupal
+
      3. Instancia de MYSQL que se ejecutará en un contenedor de Docker
+
      4. Una intancia de un servidor NFS, El cual también correrá en un contenedor docker
-#
+
 <texto descriptivo>
 
 ## 1.1. Que aspectos cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
