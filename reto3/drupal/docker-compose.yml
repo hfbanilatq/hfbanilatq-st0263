@@ -7,10 +7,13 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ~/var/www/html:/var/www/html
+      - drupal-vol:/var/www/html
     user: 1000:1000
     networks:
       - drupal-network
 
 networks:
   drupal-network:
+
+volumes:
+  drupal-vol:
