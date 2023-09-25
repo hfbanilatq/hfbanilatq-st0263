@@ -1,9 +1,6 @@
 sudo yum update -y
 sudo yum install nfs-utils -y
-sudo mkdir /nfs-share
-sudo chown nobody:nobody /nfs-share
-sudo chmod 777 /nfs-share
-
-# Luego debes editar el archivo /etc/exports y añadir lo siguiente: /nfs-share IP_DEL_CLIENTE(rw,sync,no_subtree_check) 
-# reemplaza el IP_DEL_CLIENTE por la ip dodne tengas el drupal si tienes mas de una instancia debes añadir los registros
-# de cada una
+sudo mkdir ~/nfsshared
+sudo chown nobody:nobody ~/nfsshared
+sudo chmod 777 ~/nfsshared
+sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport 44.216.81.68:/nfsshared   ~/nfsshared/

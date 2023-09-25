@@ -42,15 +42,16 @@
 # COMPOBAR LA INSTALACION DE DOCKER-COMPOSE: docker-compose version
 
 # MOVERSE A LA CARPETA DEL SERVICIO QUE QUIERAS DESPLEGAR EN DOCKER: cd hfbanilatq-st0263/reto3/mysql/{CARPETA_OBJETIVO}
-# NOTA IMPORTANTE PARA PODER CREAR EL NFS SERVER CON DOCKER NECESITAS CREAR LAS SIGUIENTES CARPETAS dentro del contenedor para eso ejecuta:
-# docker exec -it nfs-server /bin/sh
+
+# MONTAR EL SERVICIO EN DOCKER COMPOSE: docker-compose up -d
+# VERIFICAR QUE SE EJECUTE CORRECTAMENTE: docker-compose ps
+
+# NOTA IMPORTANTE PARA PODER CREAR EL NFS SERVER NECESITAS EJECUTAR LOS COMANDOS EN EL DOCUMENTO /nfs/ EN EL SERVIDOR NFS
 # y luego corre lo que se encuentra en el documento crear-directorios-nfs.sh dentro del contenedor
 
 
 
 
-# MONTAR EL SERVICIO EN DOCKER COMPOSE: docker-compose up -d
-# VERIFICAR QUE SE EJECUTE CORRECTAMENTE: docker-compose ps
 #
 ## detalles del desarrollo.
 ## detalles técnicos
