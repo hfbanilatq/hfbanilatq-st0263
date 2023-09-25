@@ -8,10 +8,10 @@ services:
       - SHARED_DIRECTORY=/nfsshare
       - SYNC=true
     volumes:
-      - /tec3/nfs/modules:/nfsshare/modules
-      - /tec3/nfs/profiles:/nfsshare/profiles
-      - /tec3/nfs/themes:/nfsshare/themes
-      - /tec3/nfs/sites:/nfsshare/sites
+      - nfsshare-modules:/nfsshare/modules
+      - nfsshare-profiles:/nfsshare/profiles
+      - nfsshare-themes:/nfsshare/themes
+      - nfsshare-sites:/nfsshare/sites
     ports:
       - "2049:2049/tcp"
       - "2049:2049/udp"
@@ -27,3 +27,8 @@ services:
 
 networks:
   nfs_network:
+volumes:
+   nfsshare-modules:
+   nfsshare-profiles:
+   nfsshare-themes:
+   nfsshare-sites:
