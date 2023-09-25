@@ -1,4 +1,11 @@
-version: '3'
+volumes:
+  nfsshared:
+    driver: vieux/sshfs
+    driver_opts:
+      sshcmd: "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+      source: /ruta/en/tu/servidor/nfsshared  # Ruta en tu servidor NFS
+      target: /var/www/html  # Punto de montaje en el contenedor
+
 services:
   drupal:
     image: drupal:9
@@ -7,11 +14,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ~/nfsshared/var/www/html/modules:/var/www/html/modules
-      - ~/nfsshared/var/www/html/profiles:/var/www/html/profiles
-      - ~/nfsshared/var/www/html/themes:/var/www/html/themes
-      - ~/nfsshared/var/www/html/sites:/var/www/html/sites
-    user: "1000:1000"
+      - nfsshared:/var/www/html
     networks:
       - drupal-network
 

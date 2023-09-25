@@ -8,7 +8,6 @@ services:
     networks:
       - nginx-network
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf  # Monta tu archivo de configuración personalizado
-
+      - ./nginx.conf:/etc/nginx/nginx.conf
 networks:
   nginx-network:
