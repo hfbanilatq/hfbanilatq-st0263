@@ -20,25 +20,25 @@ volumes:
     driver_opts:
       type: nfs
       o: addr=44.216.81.68,nfsvers=4
-      device: "/nfsshare/modules"
+      device: "~/nfsshare/modules"
   drupal-profiles:
     driver: local
     driver_opts:
       type: nfs
       o: addr=44.216.81.68,nfsvers=4
-      device: "/nfsshare/profiles"
+      device: "~/nfsshare/profiles"
   drupal-themes:
     driver: local
     driver_opts:
       type: nfs
       o: addr=44.216.81.68,nfsvers=4
-      device: "/nfsshare/themes"
+      device: "~/nfsshare/themes"
   drupal-sites:
     driver: local
     driver_opts:
       type: nfs
       o: addr=44.216.81.68,nfsvers=4
-      device: "/nfsshare/sites"
+      device: "~/nfsshare/sites"
 
 networks:
   drupal-network:

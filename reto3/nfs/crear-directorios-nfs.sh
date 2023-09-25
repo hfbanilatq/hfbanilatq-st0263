@@ -1,9 +1,9 @@
-cd /nfsshare
-mkdir -p modules
-mkdir -p profiles
-mkdir -p themes
-mkdir -p sites
-chmod -R 777 modules
-chmod -R 777 profiles
-chmod -R 777 themes
-chmod -R 777 sites
+cd ~/nfsshare
+sudo mkdir -p modules
+sudo mkdir -p profiles
+sudo mkdir -p themes
+sudo mkdir -p sites
+sudo chmod -R 777 modules
+sudo chmod -R 777 profiles
+sudo chmod -R 777 themes
+sudo chmod -R 777 sites
