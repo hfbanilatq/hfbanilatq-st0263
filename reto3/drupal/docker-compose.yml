@@ -1,19 +1,17 @@
 version: '3'
 services:
   drupal:
-    image: drupal:9
+    image: drupal:8.7.8-fpm-alpine
     container_name: drupal
-    env_file: .env
-    ports:
-      - "80:80"
-    volumes:
-      - drupal-vol:/var/www/html
-    user: 1000:1000
+    restart: unless-stopped
     networks:
-      - drupal-network
+      - internal
+      - external
+    volumes:
+      - drupal-data:/var/www/html
 
 networks:
   drupal-network:
 
 volumes:
-  drupal-vol:
+  drupal-data:
