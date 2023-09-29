@@ -69,26 +69,35 @@ sudo ./instalar-docker-compose.sh
 
 
 # Comandos para instalar docker
+
 sudo amazon-linux-extras install docker
+
 sudo service docker start
+
 sudo usermod -a -G docker ec2-user
+
 sudo chkconfig docker on
 
 
 # REINICIAR LA INSTANCIA: 
 
 
+
     sudo reboot
 
+
+
     sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+
 
     sudo chmod +x /usr/local/bin/docker-compose
 
 
 # COMPOBAR LA INSTALACION DE DOCKER-COMPOSE: 
 
-
+<code>
    docker-compose version
+</code>
 
 # Deplegar las aplicaciones en docker
 moverse la carpeta del proyecto git luego a reto3 y por ultimo a la carpeta del sevicio que quieres ejecutar: cd hfbanilatq-st0263/reto3/mysql/{CARPETA_OBJETIVO}
