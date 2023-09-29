@@ -53,22 +53,21 @@ NOTA IMPORTANTE PARA PODER CREAR EL NFS SERVER NECESITAS EJECUTAR LOS COMANDOS E
 
 crear-directorios-nfs.sh  
 
-/nfs/ EN EL SERVIDOR NFS y luego corre lo que se encuentra en el documento ingnorar el documento 
+/nfs/ EN EL SERVIDOR NFS y luego corre lo que se encuentra en el documento. ingnorar el documento  nfs-instalar-y-montar-sh 
 
-nfs-instalar-y-montar-sh 
-
-este se ejecuta en ambientes donde el drupal se ejecuta localmente el archivo docker-compose.yml para drupal ya tiene configurado montar un volumen nfs al arrancar
+ya este se ejecuta en ambientes donde el drupal se ejecuta localmente el archivo docker-compose.yml para drupal ya tiene configurado montar un volumen nfs al arrancar
 
 # NOTA ESTOS COMANDOS ESTÁN EN EL ARCHIVO instalar-docker-compose.sh 
 El cual te permite ejecutar todos a la vez para esto vete a la carpeta hfbanilatq-st063/reto3 y ejecuta lo siguiente: 
 
-
+<code>
 chmod +x instalar-docker-compose.sh 
 sudo ./instalar-docker-compose.sh
-
+</code>
 
 
 # Comandos para instalar docker
+<code>
 
 sudo amazon-linux-extras install docker
 
@@ -77,22 +76,21 @@ sudo service docker start
 sudo usermod -a -G docker ec2-user
 
 sudo chkconfig docker on
-
+</code>
 
 # REINICIAR LA INSTANCIA: 
 
 
-
+<code
     sudo reboot
+</code>
 
-
-
+<code>
     sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-
 
     sudo chmod +x /usr/local/bin/docker-compose
 
-
+</code>
 # COMPOBAR LA INSTALACION DE DOCKER-COMPOSE: 
 
 <code>
@@ -103,13 +101,14 @@ sudo chkconfig docker on
 moverse la carpeta del proyecto git luego a reto3 y por ultimo a la carpeta del sevicio que quieres ejecutar: cd hfbanilatq-st0263/reto3/mysql/{CARPETA_OBJETIVO}
 
 # MONTAR EL SERVICIO EN DOCKER COMPOSE: 
-
+<code>
   docker-compose up -d
+</code>
 
 # VERIFICAR QUE SE EJECUTE CORRECTAMENTE: 
 <code>
 docker-compose ps
-
+</code>
 
 ## detalles del desarrollo
 Se empelaron archivos docker-compose, por lo tanto se requiere instalar docker-compose en los servidores, se emplearon 5 instnacias de EC2 que corren sobre la misma VPC, la cual tiene 4 subnet, 2 publicas y 2 privadas, aunque al montar las instancias se utilizaron las publicas para realizar la actividad en todos los servidores, se debe crear las instancias para el nfs-server, los drupal y mysql en subnets privadas. Y acceder directamente a través de la IP privada desde el servidor nginx
@@ -123,13 +122,18 @@ MYSQL_ROOT_PASSWORD=
 MYSQL_DATABASE=
 MYSQL_PASSWORD=
 TZ=America/Bogota
+</code>
 
 # Ejemplo .env Para drupal
 
 MYSQL_HOST:
+
 MYSQL_ROOT_PASSWORD=
+
 MYSQL_DATABASE=
+
 MYSQL_PASSWORD=
+
 TZ=America/Bogota
 
 
