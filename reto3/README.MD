@@ -45,34 +45,45 @@ Se están empleando imagenes de gninx, mysql, y drupal las cuales se están ejec
 
 ## Comandos Para instalar docker y activar docker-compose e instalar git en AWS EC2 Estos comandos son para instancias Amazon Linux 2 AMI 
 # INSTALAR GIT:
+
+
  sudo yum install -y git
+
+
 # CLONAR el repositorio: 
+
 git clone https://github.com/hfbanilatq/hfbanilatq-st0263.git
+
+
 #  Instalar el servidor nfs
 NOTA IMPORTANTE PARA PODER CREAR EL NFS SERVER NECESITAS EJECUTAR LOS COMANDOS EN EL DOCUMENTO 
 
 crear-directorios-nfs.sh  
 
-/nfs/ EN EL SERVIDOR NFS y luego corre lo que se encuentra en el documento ingnorar el documento 
+/nfs/ EN EL SERVIDOR NFS y luego corre lo que se encuentra en el documento. ingnorar el documento  nfs-instalar-y-montar-sh 
 
-nfs-instalar-y-montar-sh 
-
-este se ejecuta en ambientes donde el drupal se ejecuta localmente el archivo docker-compose.yml para drupal ya tiene configurado montar un volumen nfs al arrancar
+ya este se ejecuta en ambientes donde el drupal se ejecuta localmente el archivo docker-compose.yml para drupal ya tiene configurado montar un volumen nfs al arrancar
 
 # NOTA ESTOS COMANDOS ESTÁN EN EL ARCHIVO instalar-docker-compose.sh 
 El cual te permite ejecutar todos a la vez para esto vete a la carpeta hfbanilatq-st063/reto3 y ejecuta lo siguiente: 
 
 
 chmod +x instalar-docker-compose.sh 
+
 sudo ./instalar-docker-compose.sh
 
 
-
 # Comandos para instalar docker
+
+
 sudo amazon-linux-extras install docker
+
 sudo service docker start
+
 sudo usermod -a -G docker ec2-user
+
 sudo chkconfig docker on
+
 
 
 # REINICIAR LA INSTANCIA: 
@@ -90,15 +101,20 @@ sudo chkconfig docker on
 
    docker-compose version
 
+
 # Deplegar las aplicaciones en docker
 moverse la carpeta del proyecto git luego a reto3 y por ultimo a la carpeta del sevicio que quieres ejecutar: cd hfbanilatq-st0263/reto3/mysql/{CARPETA_OBJETIVO}
 
 # MONTAR EL SERVICIO EN DOCKER COMPOSE: 
 
+
   docker-compose up -d
 
+
+
 # VERIFICAR QUE SE EJECUTE CORRECTAMENTE: 
-<code>
+
+
 docker-compose ps
 
 
@@ -114,13 +130,19 @@ MYSQL_ROOT_PASSWORD=
 MYSQL_DATABASE=
 MYSQL_PASSWORD=
 TZ=America/Bogota
+</code>
 
 # Ejemplo .env Para drupal
 
-MYSQL_HOST:
+
+MYSQL_HOST=
+
 MYSQL_ROOT_PASSWORD=
+
 MYSQL_DATABASE=
+
 MYSQL_PASSWORD=
+
 TZ=America/Bogota
 
 
