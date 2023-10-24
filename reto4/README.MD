@@ -20,8 +20,6 @@ Para el despliegue de la aplicación wordpress se empleará un deployment con al
 Se cumplieron con todos los aspectos, aunque se dificulto bastante el tema de la alta disponibilidad en la capa de datos
 
 ## 1.2. Que aspectos NO cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
-
-
 # 2. información general de diseño de alto nivel, arquitectura, patrones, mejores prácticas utilizadas.
 Cluster kubernetes con 3 nodos en HA, mysql operator corriendo en el cluster, mysql innodb cluster, drupal deployment, serice y pvc con nfs y hpa para el escalamiento automatico.
 
@@ -51,8 +49,6 @@ copiar lo que sale y ejecutarlo en los nodos workers, se debe ejecutar una vez p
 ```bash
     alias kubectl="microk8s kubectl" 
 ```
-
-
 # Instalar OpenEBS en el cluster
 
 ```bash
@@ -150,8 +146,6 @@ al igual que en la instalacion manual se cuenta con una sola replica, para ejecu
 y listo ya estaría todo correcto.
 
 
-
-
 con lo anterior ya queda totalmente configurada la app de drupal ahora solo flata que dirijas el trafico de tu dominio al cluster en mi caso emplee un balanceador de carga de google para balancear el grupo de instancias.
 
 ## detalles del desarrollo
@@ -162,9 +156,6 @@ Para este reto se desplegaron 3 VM de Ubuntu gcp  con un disco principal de 40 g
 Toda la configuracion está descrita previamente, si es necesario ver los tutoriales que se describen mejor como funciona cada cosa
 # Ejemplo .env Para mysql
 Se tiene varias carpetas, cada una con las configuraciones custom para instalar cierta solucion, drupal para poner a correr la app de drupal en alta disponibilidad, mysql para poder desplegar un cluster de mysql, openebs para poder usar almacenamiento en alta disponibilidad.
-
-
-
 
 ## 
 # Resultados 
