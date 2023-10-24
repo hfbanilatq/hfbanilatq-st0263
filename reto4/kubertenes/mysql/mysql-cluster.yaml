@@ -1,0 +1,19 @@
+apiVersion: mysql.oracle.com/v2
+kind: InnoDBCluster
+metadata:
+  name: mysqlcluster
+spec:
+  secretName: mysql-secret
+  tlsUseSelfSigned: true
+  instances: 3
+  version: 8.0.27
+  router:
+    instances: 1
+    version: 8.0.27
+  datadirVolumeClaimTemplate:
+    accessModes: 
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi
+    storageClassName: cstor-csi

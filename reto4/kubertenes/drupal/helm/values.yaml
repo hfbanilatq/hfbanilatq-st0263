@@ -1,0 +1,34 @@
+# replicaCount: 3
+
+drupalUsername: hfbanilatq
+drupalPassword: PruebaPassword
+drupalEmail: hfbanilatq@eafit.edu.co
+
+mariadb:
+  enabled: false
+externalDatabase:
+  host: mysqlcluster.default.svc.cluster.local
+  user: root
+  password: admin
+  database: drupal
+  port: 3306
+persistence:
+  enabled: true
+  existingClaim: drupalpvc
+
+ingress:
+  enabled: true
+  ingressClassName: "public"  
+  hostname: banilat.store    
+  path: "/"
+  pathType: "Prefix"
+  extraHosts:
+    - name: "www.banilat.store"  
+      path: "/"
+      pathType: "Prefix"
+
+service: 
+  type: LoadBalancer
+  port: 80
+
+

@@ -1,154 +1,196 @@
 # info de la materia: ST0263 TOPICOS ESPECIALES EN TELEMATICA
 #
-# Estudiante(s): Hector Fabio Banilat - hfbanilatq@eafit.edu.co, Daniel Alfonso Solano - dsolano@eafit.edu.co, David Sanchez - dasancheza@eafit.edu.co
+# Estudiante(s): Hector Fabio Banilat - hfbanilatq@eafit.edu.co, Daniel Alfonso Solano - dsolano@eafit.edu.co
 #
 # Profesor: Edwin Monotya, emontoya@eafit.edu.co
 
 
-# Reto 3
+# Reto 4
 
- Se debe implementar una aplicacion monolitica como drupal o wordpress, usando 5 instancias de EC2 que se definirán acontinuación:
+Se debe implementar una aplicacion monolitica como drupal o wordpress, en kubernetes con alta disponibilidad en la base de datos, alta disponibilidad en la cada de aplicacion y en la capa de almacenamiento
 
-     1. Instancia de EC2 donde se debe ejecutar un contenedor de docker con nginx que funcionara como balanceador de carga
+Se desplegaron 3 VM en gcp con sistema operativo Ubuntu las maquinas tienen un disco principal de 10 gb y un disco secundario de 100gb el disco secundario es obligatorio ya que se empleará Rook/Ceph instalado en el cluster para la alta disponibilidad en la capa de datos
 
-     2. Dos intancias de EC2 que deberan correr la aplicación en Docker en la cual seleccionamos Drupal
+Se empleará además mysql-operator para crear un cluster de base de datos en alta disponibilidad
 
-     3. Instancia de MYSQL que se ejecutará en un contenedor de Docker
+Para el despliegue de la aplicación wordpress se empleará un deployment con alta disponibilidad
 
-     4. Una intancia de un servidor NFS, El cual también correrá en un contenedor docker
-
-<texto descriptivo>
 
 ## 1.1. Que aspectos cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
-
-Se desplegó el servidor de Mysql usando docker-compose, también se configuró una instancia de EC2 Linux 2 AMI como servidor de arcvhivos NFS, se desplegaron dos servidores de EC2 donde se ejecutan las instancias de DRUPAL 9 usando docker-compose, se desplegó el sevidor nginx que sirve como balanceador de carga para las dos instancias de drupal. En los archivos de docker-compose se crean un volumen que monta la carpeta /var/www/html del servidor nfs donde se guardarán los archivos
-
-Los servidores se les asignó una ip elastica de la siguiente manera:
-
-
-    1. SERVIDOR NFS: 54.234.20.128
-    2. SERVIDOR MYSQL: 34.196.121.51
-    3. DRUPAL INSTANCIA 1: 44.218.130.159
-    4. DRUPAL INSTANCIA 2: 44.216.81.68
-    5. NGINX LOAD BALANCER: 34.201.89.10
-
+Se cumplieron con todos los aspectos, aunque se dificulto bastante el tema de la alta disponibilidad en la capa de datos
 
 ## 1.2. Que aspectos NO cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
 
-Por indicacion del profesor no se continuo con la adquisición del dominio y su posterior instalación de certificados
 
 # 2. información general de diseño de alto nivel, arquitectura, patrones, mejores prácticas utilizadas.
-Como se explico en la definicion de la actividad se tiene un servidor que corre un contenedor en docker que sirve como balanceador de carga para dos servidores que están corriendo imagenes de drupal, además se tiene un servidor sql donde ambos drupal obtienen los datos y por ultimo se tiene un servidor nfs donde los archivos de drupal se almacenan para que sin importar el drupal que el load balancer me redireccione la solicitud tengan los mismos archivos
+Cluster kubernetes con 3 nodos en HA, mysql operator corriendo en el cluster, mysql innodb cluster, drupal deployment, serice y pvc con nfs y hpa para el escalamiento automatico.
 
-# 3. Descripción del ambiente de desarrollo y técnico: lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
-Se están empleando imagenes de gninx, mysql, y drupal las cuales se están ejecutando mediante archivos docker-compose. Se emplead docker-compose para subir las aplicaciones
-
-## Comandos Para instalar docker y activar docker-compose e instalar git en AWS EC2 Estos comandos son para instancias Amazon Linux 2 AMI 
 # INSTALAR GIT:
- sudo yum install -y git
+ sudo apt install -y git
 # CLONAR el repositorio: 
+```bash
 git clone https://github.com/hfbanilatq/hfbanilatq-st0263.git
-#  Instalar el servidor nfs
-NOTA IMPORTANTE PARA PODER CREAR EL NFS SERVER NECESITAS EJECUTAR LOS COMANDOS EN EL DOCUMENTO 
+```
+#  Instalar Microk8s en cada servidor
 
-crear-directorios-nfs.sh  
+Ejecutar:  
+```bash
+        sudo apt update
+        sudo snap install microk8s --classic
+        sudo usermod -a -G microk8s hfbanilatq
+        sudo microk8s enable cert-manager dashboard hostpath-storage ingress metrics-server
+```        
 
-/nfs/ EN EL SERVIDOR NFS y luego corre lo que se encuentra en el documento ingnorar el documento 
+Desde el nodo principal ejecutar:
 
-nfs-instalar-y-montar-sh 
+```bash
+        microk8s add-node
+```
+copiar lo que sale y ejecutarlo en los nodos workers, se debe ejecutar una vez por worker el mismo comando para que le genere un comando de conexion al cluster, para usar kubectl directamente ejecuta este comando:
 
-este se ejecuta en ambientes donde el drupal se ejecuta localmente el archivo docker-compose.yml para drupal ya tiene configurado montar un volumen nfs al arrancar
-
-# NOTA ESTOS COMANDOS ESTÁN EN EL ARCHIVO instalar-docker-compose.sh 
-El cual te permite ejecutar todos a la vez para esto vete a la carpeta hfbanilatq-st063/reto3 y ejecuta lo siguiente: 
-
-
-chmod +x instalar-docker-compose.sh 
-sudo ./instalar-docker-compose.sh
-
-
-
-# Comandos para instalar docker
-sudo amazon-linux-extras install docker
-sudo service docker start
-sudo usermod -a -G docker ec2-user
-sudo chkconfig docker on
+```bash
+    alias kubectl="microk8s kubectl" 
+```
 
 
-# REINICIAR LA INSTANCIA: 
+# Instalar OpenEBS en el cluster
+
+```bash
+    sudo systemctl enable --now iscsid
+    microk8s helm repo add openebs-cstor https://openebs.github.io/cstor-operators
+    microk8s helm repo update
+    microk8s helm install openebs-cstor openebs-cstor/cstor -n openebs --create-namespace --set-string csiNode.kubeletDir="/var/snap/microk8s/common/var/lib/kubelet/"
+    kubectl get pod -n openebs
+    kubectl get bd -n openebs
+ ```
 
 
-    sudo reboot
+En caso de que por algún motivo no funcione también puedes seguir el tutorial para usar openebs  [cStor](https://github.com/openebs/cstor-operators/blob/develop/docs/quick.md) en la carpeta openebs/cStor hay un ejemplo de la implementacion para 3 storage. Se debe modificar los valores como indica el tutorial para que coincida con los que se encuentran en tu cluster
 
-    sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+```bash
+    kubectl apply -f openebs/cStor/cspc-multi.yaml
+    kubectl apply -f openebs/cStor/storageclass.yaml
+ ```
 
-    sudo chmod +x /usr/local/bin/docker-compose
+# Habilitar NFS en el cluster 
+Como se deben conectar varios pods a los persistence volumes es necesario que los PVC creados tengan la capacidad de ser leidos y escritos multiples veces para ello se empleará la capacidad que está en estado beta de OpenEBS se debe seguir el siguiente tutorial [NFS Dynamic Provisioner OpenEBS](https://github.com/openebs/dynamic-nfs-provisioner/blob/develop/docs/intro.md)
 
 
-# COMPOBAR LA INSTALACION DE DOCKER-COMPOSE: 
+Acá dejaré un resumen de los comandos a usar:
+
+   ```bash
+    sudo apt install nfs-common -y
+    microk8s helm repo add openebs https://openebs.github.io/charts
+    microk8s helm repo update
+    microk8s helm install openebs openebs/openebs -n openebs --create-namespace   --set ndm.enabled=false --set localprovisioner.enabled=false --set nfs-provisioner.enabled=true
+    
+    kubectl apply -f openebs/cStor/nfs-storageclass.yaml 
+   ```
+
+# Instalar la base de datos en alta disponibilidad en Kubernetes
+
+Para la base de datos en alta disponibilidad se empleará mysql-operator que es una solución realizada por mysql, para lo cual se deben ejecutar los siguientes comandos:
+
+```bash
+    kubectl apply -f https://raw.githubusercontent.com/mysql/mysql-operator/trunk/deploy/deploy-crds.yaml
+    kubectl apply -f https://raw.githubusercontent.com/mysql/mysql-operator/trunk/deploy/deploy-operator.yaml
+```
+
+para validar que todo se haya ejecutado correctamente se debe emplear el siguiente comando:
+
+```bash
+    kubectl get deployment mysql-operator --namespace mysql-operator
+```
+
+si los procesos resultantes estan en estado running, el operador de mysql se instaló correctamente, ahora vamos a ejecutar los archivos que se encuentran dentro de la carpeta mysql
+
+```bash
+    kubectl apply -f mysql/secrets.yaml
+    kubectl apply -f mysql/mysql-cluster.yaml
+```
+
+con esto queda habilitada la base de datos en alta disponibilidad. 
+
+# Instalación de drupal usando kubectl
+Antes que nada para ejecutar estos comando primero se ejecutó alias kubectl="microk8s kubectl"
+
+Ahora bien, para lograr la instalación de drupal en un cluster de kubernetes se deben ejecutar los archivos dentro de la carpeta kubernetes/drupal
+
+```bash
+    kubectl apply -f drupal/pvc.yaml
+    kubectl apply -f drupal/deployment.yaml
+    kubectl apply -f drupal/ingress.yaml 
+```
+
+Ese deployment solo tiene 1 replica de drupal, ya que si se inicia con más de una replica genera conflictos al inicializar el pods, ya que ambos intentan instalarse al mismo tiempo, generando varios reinicios, por eso se dejó el deployment a una sola replica, para cumplir con la alta disponibilidad en la capa de aplicacion se empleará un HPA (Escalamiento horizontal automatico de pods) para ello se debe esperar que el deploymente esté correctamente ejecutado y que tenga el pod en estado ready sin ningun reinicio. Una vez se cumple ejecuta:
+
+```bash
+    kubectl apply -f drupal/drupal-hpa.yaml
+```
+
+Si no tienes certificado y quieres que el ingress lo genere automaticamente debes ejecutar lo siguiente:
+
+```bash
+    kubectl delete -f drupal/ingress.yaml 
+    kubectl apply -f drupal/cert-staging.yaml
+    kubectl apply -f drupal/ingress-ssl.yaml
+```
+Si por alguna razón te llega a fallar la instalación por algún problema de base de datos prueba mejor realizar la instalación usando helm charts para ellos ejecuta:
+
+```bash
+    microk8s helm install drupal bitnami/drupal -f drupal/helm/values.yaml
+```
+al igual que en la instalacion manual se cuenta con una sola replica, para ejecutar mas replias debes descomentar la linea replicaCounts y adicionar el valor de replicar que quieras luego debes ejecutar un upgrade asi:
 
 
-   docker-compose version
+```bash
+    microk8s helm upgrade drupal -f drupal/helm/values.yaml
+```
 
-# Deplegar las aplicaciones en docker
-moverse la carpeta del proyecto git luego a reto3 y por ultimo a la carpeta del sevicio que quieres ejecutar: cd hfbanilatq-st0263/reto3/mysql/{CARPETA_OBJETIVO}
+y listo ya estaría todo correcto.
 
-# MONTAR EL SERVICIO EN DOCKER COMPOSE: 
 
-  docker-compose up -d
 
-# VERIFICAR QUE SE EJECUTE CORRECTAMENTE: 
-<code>
-docker-compose ps
 
+con lo anterior ya queda totalmente configurada la app de drupal ahora solo flata que dirijas el trafico de tu dominio al cluster en mi caso emplee un balanceador de carga de google para balancear el grupo de instancias.
 
 ## detalles del desarrollo
-Se empelaron archivos docker-compose, por lo tanto se requiere instalar docker-compose en los servidores, se emplearon 5 instnacias de EC2 que corren sobre la misma VPC, la cual tiene 4 subnet, 2 publicas y 2 privadas, aunque al montar las instancias se utilizaron las publicas para realizar la actividad en todos los servidores, se debe crear las instancias para el nfs-server, los drupal y mysql en subnets privadas. Y acceder directamente a través de la IP privada desde el servidor nginx
+Para este reto se desplegaron 3 VM de Ubuntu gcp  con un disco principal de 40 gb y uno secundario de 70 GB, en cada uno de las VM se instaló microk8s y se uso el comando microk8s add-node para añadir dos instancias como worker a la instancia principal. Se emplearon soluciones implementadas para kubernetes tales como OpenEBS, MysqlOperator, Ingress, Metallb. La aplicacion drupal corre en un deployment con dos replicas iniciales y tiene un HorizontalPodAutoscaler para el escalamiento automatico
+
 
 ## Parametros del proyecto
-Los parametros de configuracion para los docker-compose .yml se deben configurar en un archivo .env dentro del 
-mismo directorio
+Toda la configuracion está descrita previamente, si es necesario ver los tutoriales que se describen mejor como funciona cada cosa
 # Ejemplo .env Para mysql
-<code>
-MYSQL_ROOT_PASSWORD=
-MYSQL_DATABASE=
-MYSQL_PASSWORD=
-TZ=America/Bogota
+Se tiene varias carpetas, cada una con las configuraciones custom para instalar cierta solucion, drupal para poner a correr la app de drupal en alta disponibilidad, mysql para poder desplegar un cluster de mysql, openebs para poder usar almacenamiento en alta disponibilidad.
 
-# Ejemplo .env Para drupal
 
-MYSQL_HOST:
-MYSQL_ROOT_PASSWORD=
-MYSQL_DATABASE=
-MYSQL_PASSWORD=
-TZ=America/Bogota
 
 
 ## 
-## Resultados 
-
+# Resultados 
+Se logra el despligue y la activacion del dominio (Al ya no existir dominions .tk gratuitos, no encontramos donde) se compró un dominio por 2 dls por un año, igualmente el certificado se consiguio con ZEROSSL es un certificado de 3 meses, hubo varias inconvenientes para poder crear un sistema de almacenamiento altamente disponible debido a las limitaciones que tiene microk8s, se intentó con un NFS en el sistema operativo directamente, se intentó con glusterfs, de igual forma con Rook/Ceph y en todos surgía un error distinto la mayoría de veces por los requisitos o permisos que pedían y que microk8s no ofrece. Al final se logró hallar una solución con OpenEBS usando cStor y NFS.
 # 4. Descripción del ambiente de EJECUCIÓN (en producción) lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
 
 # IP o nombres de dominio en nube o en la máquina servidor.
-    1. SERVIDOR NFS: 54.234.20.128
-    2. SERVIDOR MYSQL: 34.196.121.51
-    3. DRUPAL INSTANCIA 1: 44.218.130.159
-    4. DRUPAL INSTANCIA 2: 44.216.81.68
-    5. NGINX LOAD BALANCER: 34.201.89.10
+    1. 
+    2.
+    3.
+    4. GRUPO DE INSTANCIAS: drupal-hpa
 
 ## descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
+Para la conexion a la base de datos se debe usar el servicio mysql-cluster y la contraseña admin
 
 # 5. otra información que considere relevante para esta actividad.
 
-Se generaron varios inconvenientes al momento de montar los servidores drupal la carpeta en el servidor nfs, ya que no tenia acceso, se intentó montar directamente en una carpeta del sistema y luego pasarle esa carpeta como volumen de docker pero seguía generando problemas, hasta que se hayó la solución que es darle el control de /var/www/html al usuario ec2-user de esta forma al montar el volumen desde docker-compsose ya no generaba problemas de acceso y tampoco generaba problemas de lectura
+Se generaron varios inconvenientes al momento de montar los servidores drupal la carpeta en el servidor nfs, ya que no tenia acceso, se intentó montar directamente en una carpeta del sistema y luego pasarle esa carpeta como volumen al kubernetes pero seguía generando problemas, en general con el reto 3 y 4 nos hems dado cuenta que la mayor complejidad es establecer una alta disponibilidad de los datos en DFS, ya que se requiere un configuración y conocimientos extensos para realizar esta tarea titanica.
 
 # referencias:
 <debemos siempre reconocer los créditos de partes del código que reutilizaremos, así como referencias a youtube, o referencias bibliográficas utilizadas para desarrollar el proyecto o la actividad>
-## https://www.digitalocean.com/community/tutorials/how-to-install-drupal-with-docker-compose
-## https://forums.docker.com/t/docker-compose-mount-volume-nfs/132551
-## https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-server-using-block-storage
-## https://bluexp.netapp.com/blog/azure-anf-blg-linux-nfs-server-how-to-set-up-server-and-client
-## https://docs.aws.amazon.com/es_es/efs/latest/ug/mounting-fs-old.html
+https://github.com/openebs/cstor-operators/blob/develop/docs/quick.md
+https://dev.mysql.com/doc/mysql-operator/en/
+https://blogit.michelin.io/statefull-application-on-kubernetes/
+https://openebs.io/docs/concepts/casengines
+https://github.com/openebs/dynamic-nfs-provisioner/blob/develop/docs/intro.md
 
 ## url de donde tomo info para desarrollar este proyecto
 
