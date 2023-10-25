@@ -10,21 +10,22 @@ data:
   MYSQL_DATABASE: drupal
   MYSQL_PASSWORD: admin
   TZ: America/Bogota
+
 ---
 apiVersion: v1
-kind: Service
+kind: PersistentVolume
 metadata:
-  name: mysql
-  labels:
-    app: mysql
-    app.kubernetes.io/name: mysql
+  name: glusterfs-mysql-pv
 spec:
-  ports:
-  - name: mysql
-    port: 3306
-  type: ClusterIP
-  selector:
-    app: mysql
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  glusterfs:
+    endpoints: glusterfs-cluster
+    path: mysql
+    readOnly: false
+  storageClassName: glusterfs
 ---
 apiVersion: v1
 kind: Secret
@@ -40,6 +41,15 @@ apiVersion: mysql.presslabs.org/v1alpha1
 kind: MysqlCluster
 metadata:
   name: drupal-mysql-cluster
+  labels:
+    app: mysql-cluster
 spec:
   replicas: 3  
-  secretName: my-cluster-secret
+  secretName: mysql-secret
+  volumeSpec:
+    persistentVolumeClaim:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: glusterfs 
+      resources:
+        requests:
+          storage: 5Gi
