@@ -54,11 +54,20 @@ luego de realizar eso, debes obtener el ClusterIP del servicio para ello ejecuta
 kubectl get svc nfs-server
 ```
 
-copia el cluster-ip del servicio y pegalo dentro del campo server en el archivo nfs-pv.yaml
+ahora vamos a instalar un provisionador de NFS para poder realizar un provisionamiento dinamico de los PVC para ello vamos a usar helm chart, necesitas tener instalado helm3 y correr los comandos siguientes:
 
 ```bash
-kubectl apply -f nfs-pv.yaml
+    helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
+    helm repo update
 ```
+
+copia el cluster-ip del servicio y pegalo en el comando siguiente en nfs.server
+
+```bash
+helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=10.112.12.190 --set nfs.path=/exports
+```
+
+Nota: me generó error al ejecutarlo desde la consola de Git Bash, por lo que es recomendable emplear la consola predefinida del sistema operativo, en caso de windows sería cmd o powershell
 
 # Instalar la base de datos en alta disponibilidad en Kubernetes
 
@@ -84,10 +93,31 @@ si los procesos resultantes estan en estado running, el operador de mysql se ins
 
 con esto queda habilitada la base de datos en alta disponibilidad. 
 
-# Instalación de drupal usando kubectl
-Antes que nada para ejecutar estos comando primero se ejecutó alias kubectl="microk8s kubectl"
+Ahora debes crear la base de datos drupal en el cluster para ello debes ejecutar en el bash una conexión con el comando:
+```bash
+ kubectl run --rm -it myshell --image=container-registry.oracle.com/mysql/community-operator -- mysqlsh root@mysqlcluster --sql
+```
 
-Ahora bien, para lograr la instalación de drupal en un cluster de kubernetes se deben ejecutar los archivos dentro de la carpeta kubernetes/drupal
+y una vez dentro crear la base de datos drupal con el comando:
+```bash
+create database drupal;
+\exit
+```
+# Emplear una base de datos administrada por google
+Primero debemos crear una base de datos en google, para ello iremos a la interfaz gráfica de gogle y en el menu seleccionamos SQL, una vez allí le damos clic a +CREAR y se selecciona MYSQL como base de datos. Se asigna un nombre, contraseña y se selecciona la región como región unica en iowa, y otras configuraciones que consideres necesarias. En mi caso dejé todo lo demás por defecto.
+
+
+una vez la base de datos esté creada completamente, la seleccionamos y damos clic en conectar VM, acá debemos crear manualmente la base de datos drupal con el comando "create database drupal;"
+
+Luego debes modificar el archivo en drupal/deployment.yaml para que el host sea la direccion ip pública que te generó al crear la base de datos de google. y el secret en casod e que hayas puesto otra contraseña.
+# Instalación de drupal usando kubectl
+
+Para lograr la instalación de drupal en un cluster de kubernetes se deben ejecutar los archivos dentro de la carpeta kubernetes/drupal
+
+primero debes crear un secret para el sertificado, los certificados para banilat.store están en la carpeta kubernetes/cert
+```bash
+kubectl create secret tls banilat-store-certificate --cert cert/certificate.crt --key cert/private.key
+```
 
 ```bash
     kubectl apply -f drupal/pvc.yaml
@@ -101,52 +131,43 @@ Ese deployment solo tiene 1 replica de drupal, ya que si se inicia con más de u
     kubectl apply -f drupal/drupal-hpa.yaml
 ```
 
-Si no tienes certificado y quieres que el ingress lo genere automaticamente debes ejecutar lo siguiente:
-
-```bash
-    kubectl delete -f drupal/ingress.yaml 
-    kubectl apply -f drupal/cert-staging.yaml
-    kubectl apply -f drupal/ingress-ssl.yaml
-```
 Si por alguna razón te llega a fallar la instalación por algún problema de base de datos prueba mejor realizar la instalación usando helm charts para ellos ejecuta:
 
 ```bash
-    microk8s helm install drupal bitnami/drupal -f drupal/helm/values.yaml
+    helm install drupal bitnami/drupal -f drupal/helm/values.yaml
 ```
 al igual que en la instalacion manual se cuenta con una sola replica, para ejecutar mas replias debes descomentar la linea replicaCounts y adicionar el valor de replicar que quieras luego debes ejecutar un upgrade asi:
 
 
 ```bash
-    microk8s helm upgrade drupal -f drupal/helm/values.yaml
+     helm upgrade drupal -f drupal/helm/values.yaml
 ```
 
 y listo ya estaría todo correcto.
 
 
-con lo anterior ya queda totalmente configurada la app de drupal ahora solo flata que dirijas el trafico de tu dominio al cluster en mi caso emplee un balanceador de carga de google para balancear el grupo de instancias.
+con lo anterior ya queda totalmente configurada la app de drupal ahora solo flata que dirijas el trafico de tu dominio al cluster.
 
 ## detalles del desarrollo
-Para este reto se desplegaron 3 VM de Ubuntu gcp  con un disco principal de 40 gb y uno secundario de 70 GB, en cada uno de las VM se instaló microk8s y se uso el comando microk8s add-node para añadir dos instancias como worker a la instancia principal. Se emplearon soluciones implementadas para kubernetes tales como OpenEBS, MysqlOperator, Ingress, Metallb. La aplicacion drupal corre en un deployment con dos replicas iniciales y tiene un HorizontalPodAutoscaler para el escalamiento automatico
-
+Para este proyecto se desplegó un cluster de kubernetes en gcp usando el kubernetes engine, el cluster tiene 3 nodos, cada nodo se empleó el sistema operativo ubuntu. Para la prueba de base de datos en el cluster se empleó mysql-operator, para la alta disponibilidad en la capa de almacenamiento se optó por hacer un nfs-server en el cluster, sin embargo, si es para un ambiente productivo se recomienda emplear filestorage y configurarlo correctamente, no se empleó filestorage en este proyecto debido a que el tamaño minimo es de 1TB. En cuanto a la base de datos en alta disponibilidad se creó una base de datos en google, está base de datos es administrada totalmente por google y genera mayor disponibildiad, es más fácil su uso y en general es mejor emplearla que el operador de mysql en el cluster si no te preocupa el precio extra que genera.
 
 ## Parametros del proyecto
 Toda la configuracion está descrita previamente, si es necesario ver los tutoriales que se describen mejor como funciona cada cosa
-# Ejemplo .env Para mysql
-Se tiene varias carpetas, cada una con las configuraciones custom para instalar cierta solucion, drupal para poner a correr la app de drupal en alta disponibilidad, mysql para poder desplegar un cluster de mysql, openebs para poder usar almacenamiento en alta disponibilidad.
+
+Se tiene varias carpetas, cada una con las configuraciones custom para instalar cierta solucion, drupal para poner a correr la app de drupal en alta disponibilidad, mysql para poder desplegar un cluster de mysql, 
 
 ## 
 # Resultados 
-Se logra el despligue y la activacion del dominio (Al ya no existir dominions .tk gratuitos, no encontramos donde) se compró un dominio por 2 dls por un año, igualmente el certificado se consiguio con ZEROSSL es un certificado de 3 meses, hubo varias inconvenientes para poder crear un sistema de almacenamiento altamente disponible debido a las limitaciones que tiene microk8s, se intentó con un NFS en el sistema operativo directamente, se intentó con glusterfs, de igual forma con Rook/Ceph y en todos surgía un error distinto la mayoría de veces por los requisitos o permisos que pedían y que microk8s no ofrece. Al final se logró hallar una solución con OpenEBS usando cStor y NFS.
+Se logra el despligue y la activacion del dominio (Al ya no existir dominions .tk gratuitos, no encontramos donde) se compró un dominio por 2 dls por un año, igualmente el certificado se consiguio con ZEROSSL es un certificado de 3 meses, hubo varias inconvenientes para configurar el almacenamiento altamente disponible por lo que se realizó con un NFS en el cluster empleando un deployment, se intentó  con Rook/Ceph y en todos surgía un error distinto la mayoría de veces por los requisitos o permisos que pedían y que el cluster no ofrece. 
 # 4. Descripción del ambiente de EJECUCIÓN (en producción) lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
-
+kubernetes, google SQL con una instancia de mysql.
 # IP o nombres de dominio en nube o en la máquina servidor.
-    1. 
-    2.
-    3.
-    4. GRUPO DE INSTANCIAS: drupal-hpa
+    1.banilat.store
+    2. www.banialt.store
+    3. Base de datos: 34.171.129.59
 
 ## descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
-Para la conexion a la base de datos se debe usar el servicio mysql-cluster y la contraseña admin
+Para la conexion a la base de datos se debe usar el servicio mysql-cluster y la contraseña admin en el caso de usar el cluster creado en kubernetes, en caso de usar la conexión de mysql con google sql la ip que se genera al crear la instancia y la contraseña que hayas configurado.
 
 # 5. otra información que considere relevante para esta actividad.
 
@@ -154,11 +175,12 @@ Se generaron varios inconvenientes al momento de montar los servidores drupal la
 
 # referencias:
 <debemos siempre reconocer los créditos de partes del código que reutilizaremos, así como referencias a youtube, o referencias bibliográficas utilizadas para desarrollar el proyecto o la actividad>
-https://github.com/openebs/cstor-operators/blob/develop/docs/quick.md
 https://dev.mysql.com/doc/mysql-operator/en/
 https://blogit.michelin.io/statefull-application-on-kubernetes/
-https://openebs.io/docs/concepts/casengines
-https://github.com/openebs/dynamic-nfs-provisioner/blob/develop/docs/intro.md
+https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner
+https://cloud.google.com/kubernetes-engine/docs/concepts/storage-overview?hl=es-419
+https://hbayraktar.medium.com/how-to-setup-dynamic-nfs-provisioning-in-a-kubernetes-cluster-cbf433b7de29
+
 
 ## url de donde tomo info para desarrollar este proyecto
 
