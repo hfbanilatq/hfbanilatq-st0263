@@ -4,10 +4,10 @@ metadata:
   name: nfs
 spec:
   capacity:
-    storage: 100Gi
+    storage: 20Gi
   accessModes:
     - ReadWriteMany
   nfs:
-    server: 10.104.0.1
+    server: nfs-server.default.svc.cluster.local
     path: "/"
   persistentVolumeReclaimPolicy: Retain 

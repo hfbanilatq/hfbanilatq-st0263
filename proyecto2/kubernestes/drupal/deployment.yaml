@@ -100,4 +100,4 @@ spec:
       port: 80
       targetPort: 8080
   sessionAffinity: None
-  type: LoadBalancer
+  type: NodePort

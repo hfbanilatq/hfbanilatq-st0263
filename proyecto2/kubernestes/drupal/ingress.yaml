@@ -1,37 +1,35 @@
 apiVersion: networking.k8s.io/v1
-kind: Ingress
+kind: "Ingress"
 metadata:
   name: drupal-ingress
 spec:
-  ingressClassName: public
+  defaultBackend:
+    service:
+      name: drupal-service
+      port:
+        number: 80
+  tls:
+  - secretName: "banilat-store-certificate"
   rules:
-  - host: banilat.store
-    http:
+  - http:
       paths:
-      - path: /
-        pathType: Prefix
+      - path: "/"
         backend:
           service:
-            name: drupal-service
+            name: "drupal-service"
             port:
               number: 80
-  - host: www.banilat.store
-    http:
+        pathType: "ImplementationSpecific"
+    host: "banilat.store"
+  - http:
       paths:
-      - path: /
-        pathType: Prefix
+      - path: "/"
         backend:
           service:
-            name: drupal-service
+            name: "drupal-service"
             port:
               number: 80
-  - host: prueba.banilat.store
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: drupal-service
-            port:
-              number: 80
+        pathType: "ImplementationSpecific"
+    host: "www.banilat.store"
+status:
+  loadBalancer: {}
