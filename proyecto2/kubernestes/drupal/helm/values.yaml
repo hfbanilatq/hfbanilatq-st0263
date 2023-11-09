@@ -14,7 +14,7 @@ externalDatabase:
   port: 3306
 persistence:
   enabled: true
-  existingClaim: drupalpvc
+  existingClaim: nfs-pvc
 
 ingress:
   enabled: true

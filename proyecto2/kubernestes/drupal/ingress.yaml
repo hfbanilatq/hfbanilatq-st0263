@@ -31,5 +31,15 @@ spec:
               number: 80
         pathType: "ImplementationSpecific"
     host: "www.banilat.store"
+  - http:
+      paths:
+      - path: "/"
+        backend:
+          service:
+            name: "drupal-service"
+            port:
+              number: 80
+        pathType: "ImplementationSpecific"
+    host: "prueba.banilat.store"
 status:
   loadBalancer: {}

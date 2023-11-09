@@ -35,7 +35,7 @@ Para este proyecto necesitamos crear un cluster de kubernetes en NFS, para ello 
 # Crear un disco persistente en GCP
 Para esto debemos ir a compute engine y seleccionar discos, se debe crear un nuevo disco en blanco. Se puede hacer mediante la intefaz gráfica o a través de consola con el siguiente comando
 ```bash
-gcloud compute disks create --size=100GB --zone=us-central1-b drupal-nfs-disk
+gcloud compute disks create --size=100GB --zone=us-central1-c drupal-nfs-disk
 ```
 
 Una vez creado se debe implementar en  kubernetes unos deployments y servicios que se encuentran en en la carpeta NFS
@@ -64,7 +64,7 @@ ahora vamos a instalar un provisionador de NFS para poder realizar un provisiona
 copia el cluster-ip del servicio y pegalo en el comando siguiente en nfs.server
 
 ```bash
-helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=10.112.12.190 --set nfs.path=/exports
+helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=10.112.10.169 --set nfs.path=/exports
 ```
 
 Nota: me generó error al ejecutarlo desde la consola de Git Bash, por lo que es recomendable emplear la consola predefinida del sistema operativo, en caso de windows sería cmd o powershell
