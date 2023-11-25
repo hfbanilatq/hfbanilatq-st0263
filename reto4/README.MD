@@ -85,15 +85,6 @@ Acá dejaré un resumen de los comandos a usar:
 
 # Instalar la base de datos en alta disponibilidad en Kubernetes
 
-Para instalar la base de datos en alta disponibilidad se requiere tener un aprovisonador de almanamiento "StorageClass" para que genere automaticamente los pvc y pv de la base de datos para ello emplearemos rook/ceph en el cluster
-
-Se instalará empleando helm3 para ello necesitas tenerlo instalado en tu PC
-
-```bash
-helm repo add rook-release https://charts.rook.io/release
-helm install --create-namespace --namespace rook-ceph rook-ceph rook-release/rook-ceph -f https://github.com/rook/rook/blob/master/deploy/charts/rook-ceph/values.yaml
-```
-
 Para la base de datos en alta disponibilidad se empleará mysql-operator que es una solución realizada por mysql, para lo cual se deben ejecutar los siguientes comandos:
 
 ```bash
