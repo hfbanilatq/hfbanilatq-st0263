@@ -16,7 +16,6 @@ El objetivo de este proyecto3 es implementar una arquitectura de Streaming de Bi
 
 # 2. Video sustentación
 
-[https://youtu.be/nybIcgaGzqU](https://youtu.be/nybIcgaGzqU)
 
 # 3. Aspectos solucionados y no solucionados
 

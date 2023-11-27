@@ -3,8 +3,8 @@ import org.apache.spark.sql.SparkSession
 
 // Creación de la sesión de Spark
 val spark = SparkSession.builder.appName("KafkaToS3Storage").getOrCreate()
-spark.sparkContext.hadoopConfiguration.set("fs.s3a.access.key", "AKIAUQGUET36CIVPGF4V")
-spark.sparkContext.hadoopConfiguration.set("fs.s3a.secret.key", "q9oDmqqahZjc2rlnzIuofzgfoKGCznqr7/Ere2vC")
+spark.sparkContext.hadoopConfiguration.set("fs.s3a.access.key", "YOUR KEY")
+spark.sparkContext.hadoopConfiguration.set("fs.s3a.secret.key", "YOUR SECRET")
 import spark.implicits._
 
 // Lectura de datos desde Kafka
