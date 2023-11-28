@@ -7,6 +7,9 @@
 # Lab 3.4: Laboratorio Spark con databricks
 Objetivo: Ejecutar cargas de trabajo para analisis de datos usando un cluster de Spark y Notebooks con databricks
 
+
+
+
 Para este laboratorio se creará un cluster de spark con databricks, para ello necesitas una cuenta de databricks puedes solicitar una con GCP ve a la consola de GCP y en el buscador pon databricks, allí se debe realizar la solicitud y te enviará a la página de registro. Una vez aprobada en el resultado de búsqueda de gcp te debe aparecer algo como esto:
  
 
@@ -85,6 +88,10 @@ Y un extra:
  
 
 Y listo, con esto finalizamos el Laboratorio.
+
+# URL BUCKET
+gs://lab-sparkhfbanilatq/covid-19/
+
 
 
 
